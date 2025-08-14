@@ -1,5 +1,6 @@
 cmake_minimum_required(VERSION 3.10)
 set(LIBRARY "cmarkextensions")
+set(STATICLIBRARY "cmarkextensions_static")
 set(LIBRARY_SOURCES
     core-extensions.c
     ext_scanners.c
@@ -25,6 +26,17 @@ include_directories(. ${CMAKE_CURRENT_BINARY_DIR})
 set(CMAKE_C_FLAGS_PROFILE "${CMAKE_C_FLAGS_RELEASE} -pg")
 set(CMAKE_LINKER_PROFILE "${CMAKE_LINKER_FLAGS_RELEASE} -pg")
 
-add_library(${LIBRARY} SHARED ${LIBRARY_SOURCES})
 
-target_link_libraries(cmarkextensions libcmark)
+if (CMARK_SHARED)
+  add_library(${LIBRARY} SHARED ${LIBRARY_SOURCES})
+
+  target_link_libraries(${LIBRARY} libcmark)
+endif()
+
+if (CMARK_STATIC)
+  add_library(${STATICLIBRARY} STATIC ${LIBRARY_SOURCES})
+  set_target_properties(${STATICLIBRARY} PROPERTIES
+    COMPILE_FLAGS -DCMARK_STATIC_DEFINE
+    POSITION_INDEPENDENT_CODE ON)
+  target_link_libraries(${STATICLIBRARY} libcmark)
+endif()
