@@ -344,7 +344,7 @@ static cmark_node *try_opening_flexlist_block(cmark_syntax_extension * self,
 
       cmark_node_set_list (ret, data);
       cmark_node_set_syntax_extension(ret, self);
-      cmark_node_set_html_attrs (ret, strdup("hotdoc-flex-list=\"true\""));
+      cmark_node_set_html_attrs (ret, "hotdoc-flex-list=\"true\"");
       parent_container = ret;
     }
 
@@ -352,7 +352,7 @@ static cmark_node *try_opening_flexlist_block(cmark_syntax_extension * self,
     ret = cmark_parser_add_child(parser, parent_container, CMARK_NODE_ITEM,
                                  cmark_parser_get_first_nonspace(parser) + 1);
     cmark_node_set_syntax_extension(ret, self);
-    cmark_node_set_html_attrs (ret, strdup("hotdoc-flex-item=\"true\""));
+    cmark_node_set_html_attrs (ret, "hotdoc-flex-item=\"true\"");
 
     cmark_node_set_list (ret, data);
     mem->free(data);
